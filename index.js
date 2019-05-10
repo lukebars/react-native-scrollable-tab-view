@@ -65,10 +65,7 @@ const ScrollableTabView = createReactClass({
     let lastScrollTimestamp;
     let scrollValue;
     let scrollXIOS;
-    let positionAndroid;
-    let offsetAndroid;
 
-    if (Platform.OS === 'ios') {
       scrollXIOS = new Animated.Value(this.props.initialPage * containerWidth);
       const containerWidthAnimatedValue = new Animated.Value(containerWidth);
       // Need to call __makeNative manually to avoid a native animated bug. See
@@ -80,30 +77,12 @@ const ScrollableTabView = createReactClass({
       scrollXIOS.addListener(
         ({ value, }) => callListeners(value / this.state.containerWidth)
       );
-    } else {
-      positionAndroid = new Animated.Value(this.props.initialPage);
-      offsetAndroid = new Animated.Value(0);
-      scrollValue = Animated.add(positionAndroid, offsetAndroid);
-
-      const callListeners = this._polyfillAnimatedValue(scrollValue);
-      let positionAndroidValue = this.props.initialPage;
-      let offsetAndroidValue = 0;
-      positionAndroid.addListener(({ value, }) => {
-        positionAndroidValue = value;
-        callListeners(positionAndroidValue + offsetAndroidValue);
-      });
-      offsetAndroid.addListener(({ value, }) => {
-        offsetAndroidValue = value;
-        callListeners(positionAndroidValue + offsetAndroidValue);
-      });
-    }
+    
 
     return {
       currentPage: this.props.initialPage,
       scrollValue,
       scrollXIOS,
-      positionAndroid,
-      offsetAndroid,
       containerWidth,
       sceneKeys: this.newSceneKeys({ currentPage: this.props.initialPage, }),
     };
@@ -117,31 +96,31 @@ const ScrollableTabView = createReactClass({
     if (props.page >= 0 && props.page !== this.state.currentPage) {
       this.goToPage(props.page);
     }
+
+    // if(Platform.OS === 'android') {
+    //   if (initialCount === 0){
+    //   setTimeout(() => this.goToPage(props.initialPage), 1);
+    //   initialCount++;
+    //   }
+    // }
+  },
+
+  componentDidMount() {
+    if (this.scrollView) {
+      console.log('hey!')
+      this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false});
+    }
+    // setTimeout(() => this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 600, animated: false}), 10);
   },
 
   componentWillUnmount() {
-    if (Platform.OS === 'ios') {
-      this.state.scrollXIOS.removeAllListeners();
-    } else {
-      this.state.positionAndroid.removeAllListeners();
-      this.state.offsetAndroid.removeAllListeners();
-    }
+    this.state.scrollXIOS.removeAllListeners();
   },
 
   goToPage(pageNumber) {
-    if (Platform.OS === 'ios') {
-      const offset = pageNumber * this.state.containerWidth;
-      if (this.scrollView) {
-        this.scrollView.getNode().scrollTo({x: offset, y: 0, animated: !this.props.scrollWithoutAnimation, });
-      }
-    } else {
-      if (this.scrollView) {
-        if (this.props.scrollWithoutAnimation) {
-          this.scrollView.getNode().setPageWithoutAnimation(pageNumber);
-        } else {
-          this.scrollView.getNode().setPage(pageNumber);
-        }
-      }
+    const offset = pageNumber * this.state.containerWidth;
+    if (this.scrollView) {
+      this.scrollView.getNode().scrollTo({x: offset, y: 0, animated: !this.props.scrollWithoutAnimation, });
     }
 
     const currentPage = this.state.currentPage;
@@ -217,19 +196,29 @@ const ScrollableTabView = createReactClass({
     return child.props.tabLabel + '_' + idx;
   },
 
+  scrollToPos() {
+     this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false});
+  },
+
   renderScrollableContent() {
-    if (Platform.OS === 'ios') {
+    console.log(this.state);
+    console.log(this.props);
       const scenes = this._composeScenes();
+      console.log(this.props.initialPage * this.state.containerWidth);
       return <Animated.ScrollView
         horizontal
         pagingEnabled
         automaticallyAdjustContentInsets={false}
-        contentOffset={{ x: this.props.initialPage * this.state.containerWidth, }}
-        ref={(scrollView) => { this.scrollView = scrollView; }}
+        contentOffset={{x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false}}
+        ref={(scrollView) => { 
+          this.scrollView = scrollView; 
+          // this.scrollToPos();
+        }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: this.state.scrollXIOS, }, }, }, ],
           { useNativeDriver: true, listener: this._onScroll, }
         )}
+        onContentSizeChange={this.scrollToPos}
         onMomentumScrollBegin={this._onMomentumScrollBegin}
         onMomentumScrollEnd={this._onMomentumScrollEnd}
         scrollEventThrottle={16}
@@ -243,33 +232,6 @@ const ScrollableTabView = createReactClass({
       >
           {scenes}
       </Animated.ScrollView>;
-    } else {
-      const scenes = this._composeScenes();
-      return <AnimatedViewPagerAndroid
-        key={this._children().length}
-        style={styles.scrollableContentAndroid}
-        initialPage={this.props.initialPage}
-        onPageSelected={this._updateSelectedPage}
-        keyboardDismissMode="on-drag"
-        scrollEnabled={!this.props.locked}
-        onPageScroll={Animated.event(
-          [{
-            nativeEvent: {
-              position: this.state.positionAndroid,
-              offset: this.state.offsetAndroid,
-            },
-          }, ],
-          {
-            useNativeDriver: true,
-            listener: this._onScroll,
-          },
-        )}
-        ref={(scrollView) => { this.scrollView = scrollView; }}
-        {...this.props.contentProps}
-      >
-        {scenes}
-      </AnimatedViewPagerAndroid>;
-    }
   },
 
   _composeScenes() {
@@ -299,10 +261,10 @@ const ScrollableTabView = createReactClass({
       this._updateSelectedPage(page);
     }
     this.setState({lastScrollTimestamp: +new Date()})
-
   },
 
   _updateSelectedPage(nextPage) {
+    console.log('hey updating')
     let localNextPage = nextPage;
     if (typeof localNextPage === 'object') {
       localNextPage = nextPage.nativeEvent.position;
@@ -324,17 +286,12 @@ const ScrollableTabView = createReactClass({
   },
 
   _onScroll(e) {
-    if (Platform.OS === 'ios') {
       const offsetX = e.nativeEvent.contentOffset.x;
       if (offsetX === 0 && !this.scrollOnMountCalled) {
         this.scrollOnMountCalled = true;
       } else {
         this.props.onScroll(offsetX / this.state.containerWidth);
       }
-    } else {
-      const { position, offset, } = e.nativeEvent;
-      this.props.onScroll(position + offset);
-    }
   },
 
   _handleLayout(e) {
@@ -344,16 +301,13 @@ const ScrollableTabView = createReactClass({
       return;
     }
     
-    if (Platform.OS === 'ios') {
-      const containerWidthAnimatedValue = new Animated.Value(width);
-      // Need to call __makeNative manually to avoid a native animated bug. See
-      // https://github.com/facebook/react-native/pull/14435
-      containerWidthAnimatedValue.__makeNative();
-      scrollValue = Animated.divide(this.state.scrollXIOS, containerWidthAnimatedValue);
-      this.setState({ containerWidth: width, scrollValue, });
-    } else {
-      this.setState({ containerWidth: width, });
-    }
+    const containerWidthAnimatedValue = new Animated.Value(width);
+    // Need to call __makeNative manually to avoid a native animated bug. See
+    // https://github.com/facebook/react-native/pull/14435
+    containerWidthAnimatedValue.__makeNative();
+    scrollValue = Animated.divide(this.state.scrollXIOS, containerWidthAnimatedValue);
+    this.setState({ containerWidth: width, scrollValue, });
+
     this.requestAnimationFrame(() => {
       this.goToPage(this.state.currentPage);
     });
