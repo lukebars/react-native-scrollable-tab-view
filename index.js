@@ -96,21 +96,6 @@ const ScrollableTabView = createReactClass({
     if (props.page >= 0 && props.page !== this.state.currentPage) {
       this.goToPage(props.page);
     }
-
-    // if(Platform.OS === 'android') {
-    //   if (initialCount === 0){
-    //   setTimeout(() => this.goToPage(props.initialPage), 1);
-    //   initialCount++;
-    //   }
-    // }
-  },
-
-  componentDidMount() {
-    if (this.scrollView) {
-      console.log('hey!')
-      this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false});
-    }
-    // setTimeout(() => this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 600, animated: false}), 10);
   },
 
   componentWillUnmount() {
@@ -196,29 +181,23 @@ const ScrollableTabView = createReactClass({
     return child.props.tabLabel + '_' + idx;
   },
 
-  scrollToPos() {
+  scrollToInitialPos() {
      this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false});
   },
 
   renderScrollableContent() {
-    console.log(this.state);
-    console.log(this.props);
       const scenes = this._composeScenes();
-      console.log(this.props.initialPage * this.state.containerWidth);
       return <Animated.ScrollView
         horizontal
         pagingEnabled
         automaticallyAdjustContentInsets={false}
         contentOffset={{x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false}}
-        ref={(scrollView) => { 
-          this.scrollView = scrollView; 
-          // this.scrollToPos();
-        }}
+        ref={(scrollView) => { this.scrollView = scrollView }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: this.state.scrollXIOS, }, }, }, ],
           { useNativeDriver: true, listener: this._onScroll, }
         )}
-        onContentSizeChange={this.scrollToPos}
+        onContentSizeChange={this.scrollToInitialPos}
         onMomentumScrollBegin={this._onMomentumScrollBegin}
         onMomentumScrollEnd={this._onMomentumScrollEnd}
         scrollEventThrottle={16}
@@ -264,7 +243,6 @@ const ScrollableTabView = createReactClass({
   },
 
   _updateSelectedPage(nextPage) {
-    console.log('hey updating')
     let localNextPage = nextPage;
     if (typeof localNextPage === 'object') {
       localNextPage = nextPage.nativeEvent.position;
