@@ -1,4 +1,3 @@
-import CustomTabBar from '../../src/ScrollableTabBar';
 
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -7,22 +6,16 @@ import {
   Dimensions,
   View,
   Animated,
-  ScrollView,
   Platform,
   StyleSheet,
   ViewPagerAndroid,
   ViewPropTypes,
-  InteractionManager,
 } from 'react-native';
 import TimerMixin from 'react-timer-mixin';
 
 import SceneComponent from './SceneComponent';
 import DefaultTabBar from './DefaultTabBar';
 import ScrollableTabBar from './ScrollableTabBar';
-
-const AnimatedViewPagerAndroid = Platform.OS === 'android' ?
-  Animated.createAnimatedComponent(ViewPagerAndroid) :
-  undefined;
 
 const ScrollableTabView = createReactClass({
   mixins: [TimerMixin, ],
