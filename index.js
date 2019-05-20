@@ -8,7 +8,6 @@ import {
   Animated,
   Platform,
   StyleSheet,
-  ViewPagerAndroid,
   ViewPropTypes,
 } from 'react-native';
 import TimerMixin from 'react-timer-mixin';
@@ -175,7 +174,9 @@ const ScrollableTabView = createReactClass({
   },
 
   scrollToInitialPos() {
+    if(Platform.OS=== 'android'){
      this.scrollView.getNode().scrollTo({x: this.props.initialPage * this.state.containerWidth, y: 0, animated: false});
+    }
   },
 
   renderScrollableContent() {
@@ -335,9 +336,6 @@ module.exports = ScrollableTabView;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  scrollableContentAndroid: {
     flex: 1,
   },
 });
