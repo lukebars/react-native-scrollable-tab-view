@@ -6,6 +6,7 @@ import {
   Dimensions,
   View,
   Animated,
+  PixelRatio,
   Platform,
   StyleSheet,
   ViewPropTypes,
@@ -59,6 +60,7 @@ const ScrollableTabView = createReactClass({
     let scrollXIOS;
 
       scrollXIOS = new Animated.Value(this.props.initialPage * containerWidth);
+      console.log(this.props.initialPage, containerWidth);
       const containerWidthAnimatedValue = new Animated.Value(containerWidth);
       // Need to call __makeNative manually to avoid a native animated bug. See
       // https://github.com/facebook/react-native/pull/14435
@@ -67,7 +69,8 @@ const ScrollableTabView = createReactClass({
 
       const callListeners = this._polyfillAnimatedValue(scrollValue);
       scrollXIOS.addListener(
-        ({ value, }) => callListeners(value / this.state.containerWidth)
+        ({ value, }) => callListeners(PixelRatio.getPixelSizeForLayoutSize(value))
+        //  / this.state.containerWidth
       );
     
 
