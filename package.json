@@ -1,21 +1,21 @@
 {
   "_args": [
     [
-      "react-native-scrollable-tab-view@0.10.0",
+      "rn-scrollable-tab-view@0.1.0",
       "/Users/luke/Desktop/react-native-epg 3"
     ]
   ],
   "_from": "github:lukebars/react-native-scrollable-tab-view",
-  "_id": "react-native-scrollable-tab-view@0.10.1",
+  "_id": "rn-scrollable-tab-view@0.1.0",
   "_inBundle": false,
   "_integrity": "",
-  "_location": "/react-native-scrollable-tab-view",
+  "_location": "/rn-scrollable-tab-view",
   "_phantomChildren": {},
   "_requested": {
     "type": "git",
     "raw": "react-native-scrollable-tab-view@github:lukebars/react-native-scrollable-tab-view",
-    "name": "react-native-scrollable-tab-view",
-    "escapedName": "react-native-scrollable-tab-view",
+    "name": "rn-scrollable-tab-view",
+    "escapedName": "rn-scrollable-tab-view",
     "rawSpec": "github:lukebars/react-native-scrollable-tab-view",
     "saveSpec": "github:lukebars/react-native-scrollable-tab-view",
     "fetchSpec": null,
@@ -45,7 +45,7 @@
     "babel-eslint": "^6.1.2",
     "eslint": "^3.1.1"
   },
-  "homepage": "https://github.com/brentvatne/react-native-scrollable-tab-view#readme",
+  "homepage": "https://github.com/lukebars/react-native-scrollable-tab-view#readme",
   "keywords": [
     "react-native-component",
     "react-component",
@@ -56,17 +56,17 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "react-native-scrollable-tab-view",
+  "name": "rn-scrollable-tab-view",
   "peerDependencies": {
     "react-native": ">=0.20.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brentvatne/react-native-scrollable-tab-view.git"
+    "url": "git+https://github.com/lukebars/react-native-scrollable-tab-view.git"
   },
   "scripts": {
     "lint": "eslint -c .eslintrc . --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.10.1"
+  "version": "0.1.0"
 }
