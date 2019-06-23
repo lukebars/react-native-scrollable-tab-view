@@ -6,7 +6,7 @@
     ]
   ],
   "_from": "github:lukebars/react-native-scrollable-tab-view",
-  "_id": "react-native-scrollable-tab-view@0.10.0",
+  "_id": "react-native-scrollable-tab-view@0.10.1",
   "_inBundle": false,
   "_integrity": "",
   "_location": "/react-native-scrollable-tab-view",
@@ -68,5 +68,5 @@
     "lint": "eslint -c .eslintrc . --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.10.0"
+  "version": "0.10.1"
 }
