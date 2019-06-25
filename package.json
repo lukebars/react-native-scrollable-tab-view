@@ -1,12 +1,12 @@
 {
   "_args": [
     [
-      "rn-scrollable-tab-view@0.1.0",
+      "rn-scrollable-tab-view@0.1.1",
       "/Users/luke/Desktop/react-native-epg 3"
     ]
   ],
   "_from": "github:lukebars/react-native-scrollable-tab-view",
-  "_id": "rn-scrollable-tab-view@0.1.0",
+  "_id": "rn-scrollable-tab-view@0.1.1",
   "_inBundle": false,
   "_integrity": "",
   "_location": "/rn-scrollable-tab-view",
