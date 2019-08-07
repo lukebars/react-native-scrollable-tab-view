@@ -1,31 +1,32 @@
 {
   "_args": [
     [
-      "rn-scrollable-tab-view@0.1.3"
+      "rn-scrollable-tab-view@0.1.4",
+      "/Users/luke/Desktop/prj1260stl-madhouse"
     ]
   ],
-  "_from": "github:lukebars/react-native-scrollable-tab-view",
-  "_id": "rn-scrollable-tab-view@0.1.3",
+  "_from": "rn-scrollable-tab-view@0.1.4",
+  "_id": "rn-scrollable-tab-view@0.1.4",
   "_inBundle": false,
-  "_integrity": "",
+  "_integrity": "sha512-fflkALgIkcuaVG0bWj98Y8DtZR+/1oxqk3sN7JXDrZKyE0RlJXOiUihg2/rNWcQrXDtrz/by5hpiQM8RNa9nKA==",
   "_location": "/rn-scrollable-tab-view",
   "_phantomChildren": {},
   "_requested": {
-    "type": "git",
-    "raw": "react-native-scrollable-tab-view@github:lukebars/react-native-scrollable-tab-view",
+    "type": "version",
+    "registry": true,
+    "raw": "rn-scrollable-tab-view@0.1.4",
     "name": "rn-scrollable-tab-view",
     "escapedName": "rn-scrollable-tab-view",
-    "rawSpec": "github:lukebars/react-native-scrollable-tab-view",
-    "saveSpec": "github:lukebars/react-native-scrollable-tab-view",
-    "fetchSpec": null,
-    "gitCommittish": null
+    "rawSpec": "0.1.4",
+    "saveSpec": null,
+    "fetchSpec": "0.1.4"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "github:lukebars/react-native-scrollable-tab-view#b08caae060d467e6f782841c3d7a5df6a4401f0f",
-  "_spec": "react-native-scrollable-tab-view@github:lukebars/react-native-scrollable-tab-view",
-  "_where": "/Users/luke/Desktop/react-native-epg-copy",
+  "_resolved": "https://registry.npmjs.org/rn-scrollable-tab-view/-/rn-scrollable-tab-view-0.1.4.tgz",
+  "_spec": "0.1.4",
+  "_where": "/Users/luke/Desktop/prj1260stl-madhouse",
   "author": {
     "name": "Lukas Baranauskas & Brent Vatne"
   },
@@ -67,5 +68,5 @@
     "lint": "eslint -c .eslintrc . --ignore-path .gitignore",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.1.3"
+  "version": "0.1.4"
 }

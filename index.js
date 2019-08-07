@@ -86,7 +86,7 @@ const ScrollableTabView = createReactClass({
     if (props.children !== this.props.children) {
       this.updateSceneKeys({ page: this.state.currentPage, children: props.children, });
     }
-
+    
     if (props.page >= 0 && props.page !== this.state.currentPage) {
       this.goToPage(props.page);
     }
@@ -108,6 +108,36 @@ const ScrollableTabView = createReactClass({
       callback: this._onChangeTab.bind(this, currentPage, pageNumber),
     });
   },
+
+  onClickedTab(nextPage) {
+    if(Platform.OS === 'ios') {
+      goToInProgress = true;
+      this.handleClickedTab(nextPage);
+    }
+    else {
+      this.goToPage(nextPage);
+    }
+  },
+
+  async scrollToPage(nextPage){
+    const offset = nextPage * this.state.containerWidth;
+    if (this.scrollView) {
+      this.scrollView.getNode().scrollTo({x: offset, y: 0, animated: !this.props.scrollWithoutAnimation, });
+    }
+    return;
+  },
+
+  async handleClickedTab(nextPage){
+    await this.scrollToPage(nextPage);
+    goToInProgress = false
+
+    const currentPage = this.state.currentPage;
+    this.updateSceneKeys({
+      page: pageNumber,
+      callback: this._onChangeTab.bind(this, currentPage, pageNumber),
+    });
+  },
+
 
   renderTabBar(props) {
     if (this.props.renderTabBar === false) {
@@ -295,7 +325,7 @@ const ScrollableTabView = createReactClass({
     let overlayTabs = (this.props.tabBarPosition === 'overlayTop' || this.props.tabBarPosition === 'overlayBottom');
     let tabBarProps = {
       lastScrollTimestamp: this.state.lastScrollTimestamp,
-      goToPage: this.goToPage,
+      goToPage: this.onClickedTab,
       tabs: this._children().map((child) => child.props.tabLabel),
       activeTab: this.state.currentPage,
       scrollValue: this.state.scrollValue,
