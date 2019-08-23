@@ -1,6 +1,6 @@
 ScrollView based tab bar navigator working both on Android and iOS with initial page settings and additional tab bar props for reducing fast scrolling stutter
 
-## react-native-scrollable-tab-view
+## rn-scrollable-tab-view
 ![npm version](https://badge.fury.io/js/rn-scrollable-tab-view.svg)
 
 ## Basic usage
